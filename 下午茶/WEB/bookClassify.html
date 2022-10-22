@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bookClassify.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="bookClassify">
+        <el-container>
+            <el-header>
+                <el-button type="primary" round @click="wenxue">文学</el-button>
+                <el-button type="primary" round @click="lishi">历史</el-button>
+                <el-button type="primary" round @click="kehuan">科幻</el-button>
+                <el-button type="primary" round @click="xuanhuan">玄幻</el-button>
+                <el-button type="primary" round @click="tonghua">童话故事</el-button>
+                <el-button type="primary" round @click="manhua">漫画</el-button>
+                <el-button type="primary" round @click="nuobeier">诺贝尔文学奖</el-button>
+            </el-header>
+            <el-main>
+                <template>
+                    <div id="BookShow">
+                  <ul class="infinite-list" v-infinite-scroll="load" style="overflow:hidden" >
+                    <li v-for="p in book" class="infinite-list-item" >
+                            <div>
+                            <img :src= "p.picture"  height="140px" width="100%">
+                            </div>
+                            <div>
+                            {{p.name}}
+                            </div>
+                    </li>
+                  </ul>
+                  </div>
+                </template>
+            </el-main>
+        </el-container>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#bookClassify',
+        data: {
+            book: [{
+                id: 1,
+                picture: "1.jpg",
+                name: '三体'
+            }, {
+                id: 2,
+                picture: "2.jpg",
+                name: '三体'
+            }, {
+                id: 3,
+                picture: "3.jpg",
+                name: '三体'
+            }, {
+                id: 4,
+                picture: "4.jpg",
+                name: '三体'
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体'
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体'
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体'
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体'
+            }],
+            type: '',
+        },
+        methods: {
+            load() {
+                this.$data.book.push({
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, )
+            },
+            wenxue() {
+                this.$data.type = '文学';
+            },
+            lishi() {
+                this.$data.type = '历史';
+            },
+            kehuan() {
+                this.$data.type = '科幻';
+            },
+            xuanhuan() {
+                this.$data.type = '玄幻';
+            },
+            tonghua() {
+                this.$data.type = '童话';
+            },
+            manhua() {
+                this.$data.type = '漫画';
+            },
+            nuobeier() {
+                this.$data.type = '诺贝尔';
+            }
+        }
+    })
+</script>
+
+</html>

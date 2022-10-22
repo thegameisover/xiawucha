@@ -1,0 +1,31 @@
+#letter {
+    position: fixed;
+    left: 55%;
+    top: 10%;
+    height: 400px;
+    width: 300px;
+    background-color: white;
+    overflow: scroll;
+    display: none;
+}
+
+.item {
+    margin-top: 10px;
+    margin-right: 40px;
+}
+
+.Letter {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+#closeMessage {
+    position: absolute;
+    top: 1%;
+    left: 93%;
+    cursor: pointer;
+}
+
+.deleteMessage {
+    font-size: 10px;
+}

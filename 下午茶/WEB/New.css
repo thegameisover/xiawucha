@@ -1,0 +1,24 @@
+#title {
+    text-align: center;
+    cursor: default;
+}
+
+#more {
+    font-size: 10px;
+    font-family: '微软雅黑';
+    cursor: pointer;
+    text-align: right;
+}
+
+#News {
+    height: 200px;
+    overflow: hidden;
+    background-color: aliceblue;
+}
+
+.news {
+    text-align: center;
+    list-style: none;
+    font-size: 15px;
+    font-family: '宋体';
+}

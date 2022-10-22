@@ -1,0 +1,46 @@
+.el-row {
+    margin-bottom: 20px;
+}
+
+.el-col {
+    border-radius: 4px;
+}
+
+.bg-purple-dark {
+    background: #99a9bf;
+}
+
+.bg-purple {
+    background: #d3dce6;
+}
+
+.bg-purple-light {
+    background: #e5e9f2;
+}
+
+.grid-content {
+    border-radius: 4px;
+}
+
+.row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+}
+
+.user {
+    list-style: none;
+}
+
+.User {
+    float: left;
+    margin-left: 10%;
+}
+
+#user {
+    height: 300px;
+    overflow: scroll;
+}
+
+#Picture {
+    height: 335px;
+}

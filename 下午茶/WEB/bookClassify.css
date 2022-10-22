@@ -1,0 +1,32 @@
+#BookShow {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    margin-top: 4%;
+    height: 1000px;
+    overflow: scroll;
+}
+
+.infinite-list-item {
+    float: left;
+    margin-left: 5%;
+    margin-bottom: 5%;
+    width: 10%;
+    list-style: none;
+}
+
+.el-header,
+.el-footer {
+    background-color: white;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+    position: fixed;
+    width: 100%;
+}
+
+.el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+}

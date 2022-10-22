@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Movie.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="Movie">
+        <el-container>
+            <el-header height="100px" id="movie">
+                <table>
+                    <tr>
+                        <td class="address" @click="allAddress" @mouseover="allAddressover($event)" @mouseleave="allAddressleave($event)">全部地区</td>
+                        <td class="address" @click="huayu" @mouseover="huayuover($event)" @mouseleave="huayuleave($event)">华语</td>
+                        <td class="address" @click="oumei" @mouseover="oumeiover($event)" @mouseleave="oumeileave($event)">欧美</td>
+                        <td class="address" @click="riben" @mouseover="ribenover($event)" @mouseleave="ribenleave($event)">日本</td>
+                        <td class="address" @click="hanguo" @hanguoover="hanguoover($event)" @hanguoleave="hanguoleave($event)">韩国</td>
+                        <td class="address" @click="yindu" @yinduover="yinduover($event)" @mouseleave="yinduleave($event)">印度</td>
+                        <td class="address" @click="dongnanya" @mouseover="dongnanyaover($event)" @mouseleave="dongnanyaleave($event)">东南亚</td>
+                    </tr>
+                    <tr>
+                        <td class="type" @click="type" @mouseover="typeover($event)" @mouseleave="typeleave($event)">全部类型</td>
+                        <td class="type" @click="funny" @mouseover="funnyover($event)" @mouseleave="funnyleave($event)">喜剧</td>
+                        <td class="type" @click="love" @mouseover="loveover($event)" @mouseleave="loveleave($event)">爱情</td>
+                        <td class="type" @click="action" @mouseover="actionover($event)" @mouseleave="actionleave($event)">动作</td>
+                        <td class="type" @click="crime" @mouseover="crimeover($event)" @mouseleave="crimeleave($event)">犯罪</td>
+                        <td class="type" @click="terror" @mouseover="terrorover($event)" @mouseleave="terrorleave($event)">恐怖</td>
+                        <td class="type" @click="science" @mouseover="scienceover($event)" @mouseleave="scienceleave($event)">科幻</td>
+                    </tr>
+                    <tr>
+                        <td class="date" @click="date" @mouseover="dateover($event)" @mouseleave="dateleave($event)">全部年份</td>
+                        <td class="date" @click="dateOne" @mouseover="dateOneover($event)" @mouseleave="dateOneleave($event)">2020-今</td>
+                        <td class="date" @click="dateTwo" @mouseover="dateTwoover($event)" @mouseleave="dateTwoleave($event)">2010-2020</td>
+                        <td class="date" @click="dateThree" @mouseover="dateThreeover($event)" @mouseleave="dateThreeleave($event)">2000-2010</td>
+                        <td class="date" @click="dateFour" @mouseover="dateFourover($event)" @mouseleave="dateFourleave($event)">2000以前</td>
+                    </tr>
+                    <tr>
+                        <td class="money" @click="money" @mouseover="moneyover($event)" @mouseleave="moneyleave($event)">全部资费</td>
+                        <td class="money" @click="free" @mouseover="freeover($event)" @mouseleave="freeleave($event)">免费</td>
+                        <td class="money" @click="vip" @mouseover="vipover($event)" @mouseleave="vipleave($event)">VIP</td>
+                    </tr>
+                </table>
+            </el-header>
+            <el-main>
+                <template>
+                    <div id="MovieShow">
+                  <ul class="infinite-list" v-infinite-scroll="load" style="overflow:hidden" >
+                    <li v-for="p in move" class="infinite-list-item" >
+                            <div>
+                            <img :src= "p.picture"  height="180px" width="100%">
+                            </div>
+                            <div>
+                                {{p.name}}
+                                </div>
+                                <div>
+                                评分:{{p.goal}}
+                                </div>
+                    </li>
+                  </ul>
+                  </div>
+                </template>
+            </el-main>
+        </el-container>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#Movie',
+        data: {
+            move: [{
+                id: 1,
+                picture: "1.jpg",
+                name: '三体',
+                goal: 9.7
+            }, {
+                id: 2,
+                picture: "2.jpg",
+                name: '三体',
+                goal: 9.7
+            }, {
+                id: 3,
+                picture: "3.jpg",
+                name: '三体',
+                goal: 9.7
+            }, {
+                id: 4,
+                picture: "4.jpg",
+                name: '三体',
+                goal: 9.7
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体',
+                goal: 9.7
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体',
+                goal: 9.7
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体',
+                goal: 9.7
+            }, {
+                id: 1,
+                picture: "1.jpg",
+                name: '三体',
+                goal: 9.7
+            }],
+            address1: '',
+            type1: '',
+            date1: '',
+            money1: '',
+        },
+        methods: {
+            load() {
+                this.$data.move.push({
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, {
+                    id: 0,
+                    picture: "1.jpg",
+                    name: '三体'
+                }, )
+            },
+            allAddress() {
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "全部地区";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            allAddressover($event) {
+
+
+            },
+            allAddressleave($event) {
+
+            },
+            huayu() {
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "华语";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            huayuover($event) {
+
+            },
+            huayuleave($event) {
+
+            },
+            oumei() {
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "欧美";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            oumeiover($event) {
+
+            },
+            oumeileave($event) {
+
+            },
+            riben() {
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 3) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "日本";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            ribenover($event) {
+
+            },
+            ribenleave($event) {
+
+            },
+            hanguo() {
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 4) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "韩国";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            hanguoover($event) {
+
+            },
+            hanguoleave($event) {
+
+            },
+            yindu() {
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 5) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "印度";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            yinduover($event) {
+
+            },
+            yinduleave($event) {
+
+            },
+            dongnanya() {
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 6) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "东南亚";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            dongnanyaover($event) {
+
+            },
+            dongnanyaleave($event) {
+
+            },
+            type() {
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "全部类型";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            typeover($event) {
+
+            },
+            typeleave($event) {
+
+            },
+            funny() {
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "喜剧";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            funnyover($event) {
+
+            },
+            funnyleave($event) {
+
+            },
+            love() {
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "爱情";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            loveover($event) {
+
+            },
+            loveleave($event) {
+
+            },
+            action() {
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 3) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "动作";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            actionover($event) {
+
+            },
+            actionleave($event) {
+
+            },
+            crime() {
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 4) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "犯罪";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            crimeover($event) {
+
+            },
+            crimeleave($event) {
+
+            },
+            terror() {
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 5) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "恐怖";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            terrorover($event) {
+
+            },
+            terrorleave($event) {
+
+            },
+            science() {
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 6) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "科幻";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            scienceover($event) {
+
+            },
+            scienceleave($event) {
+
+            },
+            date() {
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "全部年份";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            dateover($event) {
+
+            },
+            dateleave($event) {
+
+            },
+            dateOne() {
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "2020";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            dateOneover($event) {
+
+            },
+            dateOneleave($event) {
+
+            },
+            dateTwo() {
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "2010";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            dateTwoover($event) {
+
+            },
+            dateTwoleave($event) {
+
+            },
+            dateThree() {
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 3) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "2000";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            dateThreeover($event) {
+
+            },
+            dateThreeleave($event) {
+
+            },
+            dateFour() {
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 4) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "1999";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            dateFourover($event) {
+
+            },
+            dateFourleave($event) {
+
+            },
+            money() {
+                var p = document.getElementsByClassName("money");
+                for (var i = 0; i < 3; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.money1 = "全部资费";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            moneyover($event) {
+
+            },
+            moneyleave($event) {
+
+            },
+            free() {
+                var p = document.getElementsByClassName("money");
+                for (var i = 0; i < 3; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.money1 = "免费";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            freeover($event) {
+
+            },
+            freeleave($event) {
+
+            },
+            vip() {
+                var p = document.getElementsByClassName("money");
+                for (var i = 0; i < 3; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.money1 = "vip";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+            },
+            vipover($event) {
+
+            },
+            vipleave($event) {
+
+            }
+
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="readBook.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="readBook">
+        <div id="introduction">
+            <div id="over">
+                <div id="Photo">
+                    <img src="1.jpg" width="100%" height="200px" />
+                </div>
+                <div id="bookName">
+                    <span>[{{country}}]</span>
+                    <span>{{writer}}</span>
+                </div>
+                <div id="goal">
+                    <el-rate v-model="value" disabled show-score text-color="#ff9900" score-template="{value}">
+                    </el-rate>
+                </div>
+            </div>
+            <div id="down">
+                <h2>{{bookName}}</h2>
+                <div>
+                    <p>{{content}}</p>
+                </div>
+
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        <div id="comment">
+            <div id="mark">
+                <div class="block">
+                    <span>邀请你打分</span>
+                    <el-rate v-model="value1"></el-rate>
+                </div>
+                <div>
+                    <i class="el-icon-s-comment">评论</i>
+                    <div>
+                        <el-button type="primary">发表评论</el-button>
+                    </div>
+                    <div id="read">
+                        <ul>
+                            <li v-for="p in people" :key="p.id" class="Read">
+                                <div>{{p.name}}:</div>
+                                <span class="good" @click="clickGood(p.id)"><i class="el-icon-toilet-paper"></i></span>
+                                <span class="good">{{p.num}}</span>
+                                <div class="look">
+                                    {{p.content}}
+                                    <ul>
+                                        <li v-for="w in response[p.id]" :key="w.id" class="response">
+                                            {{w.name}}:{{w.content}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
+        </el-input>
+        <el-button type="primary">发布</el-button>
+        <div id="huifu">
+            <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea2">
+            </el-input>
+            <el-button type="success" @click="write">回复</el-button>
+            <el-button type="danger" @click="cancel">取消</el-button>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#readBook',
+        data: {
+            country: '美',
+            writer: '奥斯特洛夫斯基',
+            bookName: '植物大战僵尸',
+            content: 'fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+            value: 5,
+            value1: null,
+            colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+            textarea1: '',
+            textarea2: '',
+            people: [{
+                name: '张三',
+                id: 0,
+                num: 1,
+                content: 'dddhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh'
+            }, {
+                name: '张三',
+                id: 1,
+                content: 'ddd'
+            }, {
+                name: '张三',
+                id: 1,
+                num: 1,
+                content: 'ddd'
+            }, {
+                name: '张三',
+                id: 1,
+                num: 1,
+                content: 'ddd'
+            }, {
+                name: '张三',
+                id: 1,
+                num: 1,
+                content: 'ddd'
+            }, {
+                name: '张三',
+                id: 1,
+                content: 'ddd'
+            }, {
+                name: '张三',
+                id: 1,
+                content: 'ddd'
+            }, {
+                name: '张三',
+                id: 1,
+                content: 'ddd'
+            }, ],
+            response: [
+                [{
+                    id: 0,
+                    name: '李白',
+                    content: '6666'
+                }, {
+                    id: 1,
+                    name: '杜甫',
+                    content: '卧槽'
+                }],
+                [{
+                    id: 3,
+                    name: '王安石',
+                    content: '牛逼'
+                }],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        },
+        methods: {
+            clickGood(id) {
+                this.$data.people[id].num += 1;
+
+            },
+            open(id) {
+                var p = document.getElementById("huifu");
+                p.style.display = "block";
+                this.$data.id = id;
+            },
+            write() {
+                this.$data.response[this.$data.id].push({
+                    name: 'ffd',
+                    content: this.textarea2,
+                })
+            },
+            cancel() {
+                var p = document.getElementById("huifu");
+                p.style.display = "none";
+            }
+        },
+    })
+</script>
+
+</html>

@@ -1,0 +1,16 @@
+#Logup {
+    position: fixed;
+    height: 400px;
+    width: 400px;
+    border: 1px solid black;
+    border-radius: 5px;
+    top: 10%;
+    left: 50%;
+    background-color: white;
+    display: none;
+}
+
+#logup {
+    position: relative;
+    left: 40%;
+}

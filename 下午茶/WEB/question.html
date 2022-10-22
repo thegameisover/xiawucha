@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="question.css">
+</head>
+
+<body>
+    <div id="question">
+        <div id="up">
+            <h3>2022年的诺贝尔文学奖作品？</h3>
+            <ul>
+                <li v-for="q in picture" :key="q.id" class="Picture">
+                    <div class="demo-image">
+                        <el-image style="width: 100px; height: 100px" :src="q.url" :fit="fill"></el-image>
+                    </div>
+                </li>
+                <li style="clear:both;list-style: none;"></li>
+            </ul>
+        </div>
+        <div>
+            <el-tag>回答</el-tag>
+        </div>
+        <div id="down">
+            <div id="comment">
+                <ul>
+                    <li v-for="p in question" :key="p.id" class="read">
+                        <div>
+                            <el-button type="text" @click="open(p.id)">{{p.name}}:</el-button>
+                            <span class="good" @click="clickGood(p.id)"><i class="el-icon-toilet-paper"></i></span>
+                            <span class="good">{{p.num}}</span>
+                        </div>
+                        <div class="q">
+                            {{p.content}}
+                            <ul>
+                                <li v-for="w in response[p.id]" :key="w.id" class="response">
+                                    {{w.name}}:{{w.content}}
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
+                </el-input>
+            </div>
+            <div>
+                <el-button type="primary">发表</el-button>
+            </div>
+        </div>
+        <div id="huifu">
+            <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea2">
+            </el-input>
+            <el-button type="success" @click="write">回复</el-button>
+            <el-button type="danger" @click="cancel">取消</el-button>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#question',
+        data: {
+            id: 0,
+            textarea1: '',
+            textarea2: '',
+            fill: "fill",
+            picture: [{
+                id: 0,
+                url: 'null'
+            }, {
+                id: 4,
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            }, {
+                id: 1,
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            }, {
+                id: 2,
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            }, ],
+            question: [{
+                id: 0,
+                content: 'fffffdfsfdfssssssssssssssssssssfdsafdadfdadaffffffffffffffffffffffffffffffffffffffffffffffff',
+                name: '张三',
+                num: 1,
+            }, {
+                id: 1,
+                content: 'fffffdfsfdfssssssssssssssssssssfdsafdadfdada',
+                name: '张三',
+                num: 1,
+            }, {
+                id: 2,
+                content: 'fffffdfsfdfssssssssssssssssssssfdsafdadfdada',
+                name: '张三',
+                num: 1,
+            }, {
+                id: 3,
+                content: 'fffffdfsfdfssssssssssssssssssssfdsafdadfdada',
+                name: '张三',
+                num: 1,
+            }, {
+                id: 4,
+                content: 'fffffdfsfdfssssssssssssssssssssfdsafdadfdada',
+                name: '张三',
+                num: 1,
+            }, {
+                id: 5,
+                content: 'fffffdfsfdfssssssssssssssssssssfdsafdadfdada',
+                name: '张三',
+                num: 1,
+            }],
+            response: [
+                [{
+                    id: 0,
+                    name: '李白',
+                    content: '6666'
+                }, {
+                    id: 1,
+                    name: '杜甫',
+                    content: '卧槽'
+                }],
+                [{
+                    id: 3,
+                    name: '王安石',
+                    content: '牛逼'
+                }],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        },
+        methods: {
+            clickGood(id) {
+                this.$data.question[id].num += 1;
+
+            },
+            open(id) {
+                var p = document.getElementById("huifu");
+                p.style.display = "block";
+                this.$data.id = id;
+            },
+            write() {
+                this.$data.response[this.$data.id].push({
+                    name: 'ffd',
+                    content: this.textarea2,
+                })
+            },
+            cancel() {
+                var p = document.getElementById("huifu");
+                p.style.display = "none";
+            }
+        },
+    })
+</script>
+
+</html>

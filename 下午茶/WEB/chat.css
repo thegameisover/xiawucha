@@ -1,0 +1,21 @@
+#chat {
+    height: 500px;
+    text-align: center;
+    overflow: scroll;
+}
+
+.Passage {}
+
+.passageShow {
+    width: 25%;
+    text-align: center;
+    float: left;
+}
+
+.infinite-list-item {
+    width: 90%;
+    margin: 0 auto;
+    background-color: white;
+    border: 1px solid #f0f2f7;
+    list-style: none;
+}
