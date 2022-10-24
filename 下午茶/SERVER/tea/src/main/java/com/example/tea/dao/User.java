@@ -3,8 +3,7 @@ package com.example.tea.dao;
 
 
 public interface User {
-    public int getId(int id);
+   public String getName(String account,String password);
 
-    public String getName(int id);
 
 }

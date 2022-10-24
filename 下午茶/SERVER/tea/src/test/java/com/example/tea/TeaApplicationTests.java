@@ -9,16 +9,28 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 @SpringBootTest
 @MapperScan("com.example.tea.dao")
 class TeaApplicationTests {
-   @Autowired
-   private User user;
 
+@Autowired
+private StringRedisTemplate stringRedisTemplate;
+@Autowired
+private User user;
     @Test
     void set()
     {
-        user.getId(1);
-    }
+        String name= user.getName("123","123");
+        System.out.println(name);
 
+    }
+    @Test
+    void get()
+    {
+        ValueOperations<String,String> valueOperations=stringRedisTemplate.opsForValue();
+        System.out.println(valueOperations.get("张三"));
+    }
 }

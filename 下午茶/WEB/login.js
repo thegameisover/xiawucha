@@ -15,9 +15,9 @@ const Login = Vue.extend({
        <td class="td"><el-input placeholder="请输入密码" v-model="password" show-password></el-input></td>
        </tr>
        <tr>
-       <td class="td">{{mark}}</td>
+       <td class="td" style="cursor: pointer;" @click="Code">{{mark}}</td>
        <td class="td"><el-input
-       placeholder="请输入验证码"
+       placeholder="点击获取验证码"
        v-model="Mark"
        clearable>
      </el-input></td>
@@ -32,7 +32,7 @@ const Login = Vue.extend({
             account: '',
             password: '',
             Mark: '',
-            mark: '111',
+            mark: '验证码',
         }
     },
     methods: {
@@ -43,7 +43,6 @@ const Login = Vue.extend({
             }
             var data = JSON.stringify(json);
             var xhr = new XMLHttpRequest();
-            console.log(data);
             xhr.open("post", "http://127.0.0.1:8080/login");
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.withCredentials = true;
@@ -54,8 +53,10 @@ const Login = Vue.extend({
                         if (xhr.responseText == "true") {
                             alert("登录成功");
                             location.href = "../Main/main.html";
+                        } else if (xhr.responseText == "code") {
+                            alert("验证码已过期");
                         } else {
-                            alert("密码或账号错误");
+                            alert("密码或账号错误亦或者不存在");
                         }
                     }
                 }
@@ -70,6 +71,26 @@ const Login = Vue.extend({
         cancelIn() {
             var p = document.getElementById("Login");
             p.style.display = "none";
+        },
+        Code() {
+            if (this.$data.account == '') {
+                alert("请先输入账号");
+            } else {
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("get", "http://127.0.0.1:8080/login?name=" + this.$data.account);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 & xhr.status < 300) {
+                            _this.$data.mark = xhr.responseText;
+                        }
+                    }
+                }
+            }
+
         }
     },
 })
