@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Movie.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="Movie">
+        <el-container>
+            <el-header height="100px" id="movie">
+                <table>
+                    <tr>
+                        <td class="address" @click="allAddress" @mouseover="allAddressover($event)" @mouseleave="allAddressleave($event)">全部地区</td>
+                        <td class="address" @click="huayu" @mouseover="huayuover($event)" @mouseleave="huayuleave($event)">华语</td>
+                        <td class="address" @click="oumei" @mouseover="oumeiover($event)" @mouseleave="oumeileave($event)">欧美</td>
+                        <td class="address" @click="riben" @mouseover="ribenover($event)" @mouseleave="ribenleave($event)">日本</td>
+                        <td class="address" @click="hanguo" @hanguoover="hanguoover($event)" @hanguoleave="hanguoleave($event)">韩国</td>
+                        <td class="address" @click="yindu" @yinduover="yinduover($event)" @mouseleave="yinduleave($event)">印度</td>
+                        <td class="address" @click="dongnanya" @mouseover="dongnanyaover($event)" @mouseleave="dongnanyaleave($event)">东南亚</td>
+                    </tr>
+                    <tr>
+                        <td class="type" @click="type" @mouseover="typeover($event)" @mouseleave="typeleave($event)">全部类型</td>
+                        <td class="type" @click="funny" @mouseover="funnyover($event)" @mouseleave="funnyleave($event)">喜剧</td>
+                        <td class="type" @click="love" @mouseover="loveover($event)" @mouseleave="loveleave($event)">爱情</td>
+                        <td class="type" @click="action" @mouseover="actionover($event)" @mouseleave="actionleave($event)">动作</td>
+                        <td class="type" @click="crime" @mouseover="crimeover($event)" @mouseleave="crimeleave($event)">犯罪</td>
+                        <td class="type" @click="terror" @mouseover="terrorover($event)" @mouseleave="terrorleave($event)">恐怖</td>
+                        <td class="type" @click="science" @mouseover="scienceover($event)" @mouseleave="scienceleave($event)">科幻</td>
+                    </tr>
+                    <tr>
+                        <td class="date" @click="date" @mouseover="dateover($event)" @mouseleave="dateleave($event)">全部年份</td>
+                        <td class="date" @click="dateOne" @mouseover="dateOneover($event)" @mouseleave="dateOneleave($event)">2020-今</td>
+                        <td class="date" @click="dateTwo" @mouseover="dateTwoover($event)" @mouseleave="dateTwoleave($event)">2010-2020</td>
+                        <td class="date" @click="dateThree" @mouseover="dateThreeover($event)" @mouseleave="dateThreeleave($event)">2000-2010</td>
+
+                    </tr>
+                    <tr>
+                        <td class="money" @click="money" @mouseover="moneyover($event)" @mouseleave="moneyleave($event)">全部资费</td>
+                        <td class="money" @click="free" @mouseover="freeover($event)" @mouseleave="freeleave($event)">免费</td>
+                        <td class="money" @click="vip" @mouseover="vipover($event)" @mouseleave="vipleave($event)">VIP</td>
+                    </tr>
+                </table>
+            </el-header>
+            <el-main>
+                <template>
+                    <div id="MovieShow">
+                  <ul class="infinite-list" v-infinite-scroll="load" style="overflow:hidden" >
+                    <li v-for="p in move" class="infinite-list-item" @click="movieShow(p.id)">
+                            <div>
+                            <img :src= "p.picture"  height="180px" width="100%">
+                            </div>
+                            <div>
+                                {{p.name}}
+                                </div>
+                                <div>
+                                评分:{{p.goal}}
+                                </div>
+                    </li>
+                  </ul>
+                  </div>
+                </template>
+            </el-main>
+        </el-container>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#Movie',
+        data: {
+            move: [],
+            address1: '',
+            type1: '',
+            date1: '',
+            money1: '',
+            n: 0,
+            page: 0,
+            type2: 'null',
+            time: 'null',
+            address: 'null',
+        },
+        methods: {
+            load() {
+                if (this.$data.type2 == 'null' && this.$data.time == 'null' && this.$data.address == 'null') {
+                    if (this.$data.n == 0) {
+                        this.$data.page += 10;
+                        var _this = this;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("get", "http://127.0.0.1:8080/AllMovie?num=" + _this.$data.page);
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.withCredentials = true;
+                        xhr.send();
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4) {
+                                if (xhr.responseText == "null") {
+                                    _this.$data.n = 1;
+                                } else if (xhr.responseText == "false") {
+                                    alert("系统出现错误");
+                                } else {
+                                    var json = JSON.parse(xhr.responseText);
+                                    for (var i in json) {
+                                        _this.$data.move.push({
+                                            id: json[i][0],
+                                            picture: json[i][3],
+                                            name: json[i][1],
+                                            goal: json[i][2],
+                                        });
+                                    };
+                                }
+                            }
+                        };
+                    } else {
+
+                    }
+
+                } else {
+                    if (this.$data.n == 0) {
+                        this.$data.page += 10;
+                        var json = {
+                            "type": this.$data.type2,
+                            "time": this.$data.time,
+                            "address": this.$data.address,
+                            "page": this.$data.page,
+                        }
+                        var data = JSON.stringify(json);
+
+                        var _this = this;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.withCredentials = true;
+                        xhr.send(data);
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4) {
+                                if (xhr.responseText == "null") {
+                                    _this.$data.n = 1;
+                                } else if (xhr.responseText == "false") {
+                                    alert("系统出现错误");
+                                } else {
+                                    var json = JSON.parse(xhr.responseText);
+                                    for (var i in json) {
+                                        _this.$data.move.push({
+                                            id: json[i][0],
+                                            picture: json[i][3],
+                                            name: json[i][1],
+                                            goal: json[i][2],
+                                        });
+                                    };
+
+                                }
+                            }
+                        };
+                    }
+                }
+            },
+            allAddress() {
+
+                this.$data.move = [];
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "全部地区";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.address = 'null';
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+
+
+
+            },
+            allAddressover($event) {
+
+
+            },
+            allAddressleave($event) {
+
+            },
+            huayu() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "华语";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.address = "华语";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            huayuover($event) {
+
+            },
+            huayuleave($event) {
+
+            },
+            oumei() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "欧美";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.address = "欧美";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            oumeiover($event) {
+
+            },
+            oumeileave($event) {
+
+            },
+            riben() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 3) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "日本";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.address = "日本";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            ribenover($event) {
+
+            },
+            ribenleave($event) {
+
+            },
+            hanguo() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 4) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "韩国";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.address = "韩国";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            hanguoover($event) {
+
+            },
+            hanguoleave($event) {
+
+            },
+            yindu() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 5) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "印度";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.address = "印度";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            yinduover($event) {
+
+            },
+            yinduleave($event) {
+
+            },
+            dongnanya() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("address");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 6) {
+                        p[i].style.color = "white";
+                        this.$data.address1 = "东南亚";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.address = "东南亚";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            dongnanyaover($event) {
+
+            },
+            dongnanyaleave($event) {
+
+            },
+            type() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "全部类型";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.type2 = 'null';
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            typeover($event) {
+
+            },
+            typeleave($event) {
+
+            },
+            funny() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "喜剧";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.type2 = "喜剧";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            funnyover($event) {
+
+            },
+            funnyleave($event) {
+
+            },
+            love() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "爱情";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.type2 = "爱情";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            loveover($event) {
+
+            },
+            loveleave($event) {
+
+            },
+            action() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 3) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "动作";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.type2 = "动作";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            actionover($event) {
+
+            },
+            actionleave($event) {
+
+            },
+            crime() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 4) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "犯罪";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.type2 = "犯罪";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            crimeover($event) {
+
+            },
+            crimeleave($event) {
+
+            },
+            terror() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 5) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "恐怖";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.type2 = "恐怖";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            terrorover($event) {
+
+            },
+            terrorleave($event) {
+
+            },
+            science() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("type");
+                for (var i = 0; i < 7; i++) {
+                    if (i == 6) {
+                        p[i].style.color = "white";
+                        this.$data.type1 = "科幻";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.type2 = "科幻";
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            scienceover($event) {
+
+            },
+            scienceleave($event) {
+
+            },
+            date() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "全部年份";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.time = 'null';
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            dateover($event) {
+
+            },
+            dateleave($event) {
+
+            },
+            dateOne() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "2020";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.time = '2020';
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            dateOneover($event) {
+
+            },
+            dateOneleave($event) {
+
+            },
+            dateTwo() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "2010";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.time = '2010';
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            dateTwoover($event) {
+
+            },
+            dateTwoleave($event) {
+
+            },
+            dateThree() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 3) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "2000";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.time = '2000';
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            dateThreeover($event) {
+
+            },
+            dateThreeleave($event) {
+
+            },
+            dateFour() {
+                this.$data.move = [];
+                var p = document.getElementsByClassName("date");
+                for (var i = 0; i < 5; i++) {
+                    if (i == 4) {
+                        p[i].style.color = "white";
+                        this.$data.date1 = "1999";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+                this.$data.n = 0;
+                this.$data.page = 0;
+                this.$data.time = '1999';
+                var json = {
+                    "type": this.$data.type2,
+                    "time": this.$data.time,
+                    "address": this.$data.address,
+                    "page": this.$data.page,
+                }
+                var data = JSON.stringify(json);
+                var _this = this;
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/MovieType");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.responseText == "null") {
+                            _this.$data.n = 1;
+                        } else if (xhr.responseText == "false") {
+                            alert("系统出现错误");
+                        } else {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.move.push({
+                                    id: json[i][0],
+                                    picture: json[i][3],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                });
+                            };
+                            _this.load();
+                        }
+                    }
+                };
+            },
+            dateFourover($event) {
+
+            },
+            dateFourleave($event) {
+
+            },
+            money() {
+
+                var p = document.getElementsByClassName("money");
+                for (var i = 0; i < 3; i++) {
+                    if (i == 0) {
+                        p[i].style.color = "white";
+                        this.$data.money1 = "全部资费";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+
+            },
+            moneyover($event) {
+
+            },
+            moneyleave($event) {
+
+            },
+            free() {
+                var p = document.getElementsByClassName("money");
+                for (var i = 0; i < 3; i++) {
+                    if (i == 1) {
+                        p[i].style.color = "white";
+                        this.$data.money1 = "免费";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+
+            },
+            freeover($event) {
+
+            },
+            freeleave($event) {
+
+            },
+            vip() {
+                var p = document.getElementsByClassName("money");
+                for (var i = 0; i < 3; i++) {
+                    if (i == 2) {
+                        p[i].style.color = "white";
+                        this.$data.money1 = "vip";
+                    } else {
+                        p[i].style.color = "black";
+                    }
+                }
+
+            },
+            vipover($event) {
+
+            },
+            vipleave($event) {
+
+            },
+            movieShow(id) {
+                window.open("tvshow.html?" + id);
+            }
+
+        },
+        mounted() {
+            var _this = this;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "http://127.0.0.1:8080/AllMovie?num=0");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.responseText != "false") {
+                        var json = JSON.parse(xhr.responseText);
+                        for (var i in json) {
+                            _this.$data.move.push({
+                                id: json[i][0],
+                                picture: json[i][3],
+                                name: json[i][1],
+                                goal: json[i][2],
+                            });
+                        };
+                    }
+                }
+            };
+        },
+    })
+</script>
+
+</html>

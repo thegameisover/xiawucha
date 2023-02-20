@@ -1,0 +1,27 @@
+#book {
+    height: 530px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.BOOK {
+    float: left;
+    list-style: none;
+    height: 130px;
+    width: 10%;
+    margin-left: 7%;
+    margin-right: 7%;
+    margin-bottom: 7%;
+    cursor: pointer;
+}
+
+#Read {
+    font-size: 15px;
+    font-family: '微软雅黑';
+    cursor: pointer;
+    text-align: right;
+}
+
+#read {
+    overflow: hidden;
+}

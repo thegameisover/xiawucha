@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Home.css">
+    <link rel="stylesheet" href="manager.css">
+</head>
+
+<body>
+    <div id="home">
+        <el-container>
+            <el-aside width="200px">
+                <el-button type="primary" @click="transformation">{{manage}}</el-button>
+            </el-aside>
+            <el-main>
+                <div id="normal">
+                    <table id="Normal">
+                        <tr>
+                            <td id="UserPhoto">
+                                <el-row class="demo-avatar demo-basic">
+                                    <el-col :span="12">
+                                        <div class="demo-basic--circle">
+                                            <div class="block">
+                                                <el-avatar :size="50" :src="circleUrl"></el-avatar>
+                                            </div>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </td>
+                            <td id="editPhoto"><i class="el-icon-camera"></i></td>
+                        </tr>
+                        <tr>
+                            <td>用户名:</td>
+                            <td>
+                                <el-input placeholder="请输入内容" v-model="Name" clearable>
+                                </el-input>
+                                </el-input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>账号:</td>
+                            <td>
+                                <el-input placeholder="请输入内容" v-model="account" clearable>
+                                </el-input>
+                                </el-input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>密码:</td>
+                            <td>
+                                <el-input placeholder="请输入内容" v-model="password" clearable>
+                                </el-input>
+                                </el-input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>出生日期:</td>
+                            <td>
+                                <div class="block">
+                                    <el-date-picker v-model="value1" type="date" placeholder="选择日期">
+                                    </el-date-picker>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="xiugai" @click="upload">
+                        <el-button type="primary">确认修改</el-button>
+                    </div>
+                </div>
+                <div id="manager" style="display:none">
+                    <manager></manager>
+                </div>
+            </el-main>
+        </el-container>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script src="manager.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: "#home",
+        data: {
+            manage: '点击切换到管理员模式',
+            circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+            Name: '',
+            account: '',
+            password: '',
+            pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() > Date.now();
+                },
+                shortcuts: [{
+                    text: '今天',
+                    onClick(picker) {
+                        picker.$emit('pick', new Date());
+                    }
+                }, {
+                    text: '昨天',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24);
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '一周前',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', date);
+                    }
+                }]
+            },
+            value1: '',
+            value2: '',
+        },
+        components: {
+            manager: manager
+        },
+        methods: {
+            /*切换模式*/
+            transformation() {
+                var p = document.getElementById("normal");
+                var q = document.getElementById("manager");
+                if (p.style.display == "none") {
+                    q.style.display = "none";
+                    p.style.display = "block";
+                } else {
+                    p.style.display = "none";
+                    q.style.display = "block";
+                }
+
+            },
+            editName() {
+                var p = document.getElementById("EditName1");
+                var q = document.getElementById("EditName");
+                p.style.display = "none";
+                q.style.display = "block";
+            },
+            upload() {
+                var json = {
+                    "username": this.$data.Name,
+                    "password": this.$data.password,
+                    "account": this.$data.account,
+                }
+                var data = JSON.stringify(json);
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/userXinxi");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(data);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        location.reload();
+                    }
+                }
+            }
+        },
+        mounted() {
+            var _this = this;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "http://127.0.0.1:8080/getUser");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.responseText != null) {
+                        var json = JSON.parse(xhr.responseText);
+                        _this.$data.Name = json.name;
+                        _this.$data.account = json.account;
+                        _this.$data.password = json.password;
+                    }
+                }
+            }
+        },
+    })
+</script>
+
+</html>

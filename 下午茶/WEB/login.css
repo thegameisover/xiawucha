@@ -1,0 +1,38 @@
+#Login {
+    position: fixed;
+    height: 400px;
+    width: 400px;
+    border: 1px solid black;
+    border-radius: 5px;
+    top: 10%;
+    left: 50%;
+    background-color: white;
+    display: none;
+}
+
+#login {
+    margin: 50px auto;
+}
+
+.td {
+    height: 70px;
+}
+
+#in {
+    position: relative;
+    left: 20%;
+    top: -10%;
+}
+
+#up {
+    position: relative;
+    left: 30%;
+    top: -10%;
+}
+
+#close {
+    position: absolute;
+    top: 3%;
+    left: 95%;
+    cursor: pointer;
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.tea.dao.question">
+  <select id="getQuestion" resultType="map">
+      select id ,title,name,writeTime,num
+      from question where 5>=id;
+  </select>
+    
+    <select id="getNewQuestion" resultType="map">
+        select id ,title,name,writeTime,num
+        from question limit #{arg0},5;
+    </select>
+
+    <select id="GetQuestion" resultType="map">
+        select title ,picture1,picture2,picture3,picture4 from question where id = #{arg0};
+    </select>
+
+   <insert id="SetQuestion">
+       insert into question (title,name,writeTime,num,picture1,picture2,picture3,picture4) values (#{arg0},#{arg1},#{arg2},0,#{arg3},"null","null","null");
+   </insert>
+</mapper>

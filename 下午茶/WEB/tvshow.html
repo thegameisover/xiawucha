@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="tvshow.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="movie">
+        <div id="introduction">
+            <div id="over">
+                <div id="Photo">
+                    <img :src="picture" width="100%" height="200px" />
+                </div>
+                <div id="goal">
+                    <el-rate v-model="value" disabled show-score text-color="#ff9900" score-template="{value}">
+                    </el-rate>
+                </div>
+            </div>
+            <div id="down">
+                <h1>{{bookName}}</h1>
+                <div class="p">
+                    <span>{{type}}</span>
+                    <span>{{time}}</span>
+                    <span>{{country}}</span>
+                </div>
+                <div class="p">
+                    <span>导演:</span>
+                    <span>{{director}}</span>
+                </div>
+                <div id="q">
+                    <p>{{content}}</p>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        <div id="comment">
+            <div id="mark">
+                <div class="block" @click="Marking">
+                    <span>邀请你打分</span>
+                    <el-rate v-model="value1" :disabled="Read"></el-rate>
+                </div>
+                <div>
+                    <i class="el-icon-s-comment">评论</i>
+                    <div>
+                        <el-button type="primary">发表评论</el-button>
+                    </div>
+                    <div id="read">
+                        <ul>
+                            <li v-for="p in people" :key="p.id" class="Read">
+                                <el-button type="text" @click="open(p.id)">{{p.name}}:</el-button>
+                                <span class="good" @click="clickGood(p.id)"><i class="el-icon-toilet-paper"></i></span>
+                                <span class="good">{{p.num}}</span>
+                                <div class="look">
+                                    {{p.content}}
+                                    <ul>
+                                        <li v-for="w in response[p.id]" :key="w.id" class="response">
+                                            {{w.name}}:{{w.content}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
+        </el-input>
+        <el-button type="primary" @click="Comment">发布</el-button>
+        <div id="huifu">
+            <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea2">
+            </el-input>
+            <el-button type="success" @click="write">回复</el-button>
+            <el-button type="danger" @click="cancel">取消</el-button>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#movie',
+        data: {
+            Read: false,
+            name: '',
+            MovieId: 0,
+            picture: '',
+            type: '剧情',
+            time: '2021',
+            country: '加拿大',
+            director: '卡梅隆',
+            bookName: '植物大战僵尸',
+            content: '影片讲述纽约的一对兄弟文森特（杰西·艾森伯格）与安东（亚历山大·斯卡斯加德），他们是高风险高频次交易操作员，梦想建造从堪萨斯州到新泽西州之间的直线光纤电缆，以赚取百万财富，然而他们以前的老板伊娃·托雷斯——一个强大又有极强控制欲的女人的紧逼让他们的计划充满了挫折和挑战',
+            value: 5,
+            value1: null,
+            colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+            textarea1: '',
+            textarea2: '',
+            id: 0,
+            people: [],
+            response: [
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        },
+        methods: {
+            clickGood(id) {
+                this.$data.question[id].num += 1;
+
+            },
+            open(id) {
+                var p = document.getElementById("huifu");
+                p.style.display = "block";
+                this.$data.id = id;
+            },
+            write() {
+                this.$data.response[this.$data.id].push({
+                    name: 'ffd',
+                    content: this.textarea2,
+                })
+            },
+            cancel() {
+                var p = document.getElementById("huifu");
+                p.style.display = "none";
+            },
+            Marking() {
+                if (this.$data.name == "null") {
+                    alert("请先登录");
+                } else {
+                    if (this.$data.Read) {
+                        alert("不可重复评分");
+                    } else {
+                        this.$data.Read = true;
+                        var json = {
+                            "name": this.$data.name,
+                            "mark": this.$data.value1,
+                            "movie": this.$data.MovieId,
+                        }
+                        json = JSON.stringify(json);
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("post", "http://127.0.0.1:8080/MovieMark");
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.withCredentials = true;
+                        xhr.send(json);
+                    }
+                }
+            },
+            Comment() {
+                var json = {
+                    "name": this.$data.name,
+                    "comment": this.$data.textarea1,
+                    "movie": this.$data.MovieId,
+                }
+                json = JSON.stringify(json);
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/moviecomment");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(json);
+                location.reload();
+            }
+        },
+        mounted() {
+            var p = location.search;
+            p = p.slice(p.indexOf('?') + 1);
+            this.$data.MovieId = p;
+            var _this = this;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "http://127.0.0.1:8080/ReadMovie?id=" + p);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 & xhr.status < 300) {
+                        if (xhr.responseText != "null") {
+                            var json = JSON.parse(xhr.responseText);
+                            _this.$data.bookName = json.movieName;
+                            _this.$data.type = json.movieType;
+                            _this.$data.time = json.time;
+                            _this.$data.country = json.country;
+                            _this.$data.director = json.director;
+                            _this.$data.content = json.introduction;
+                            _this.$data.value = json.mark;
+                            _this.$data.picture = json.picture;
+                            _this.$data.value1 = json.markMovie;
+                            _this.$data.name = json.name;
+                            if (_this.$data.value1 == 0) {
+                                _this.$data.Read = false;
+                            } else {
+                                _this.$data.Read = true;
+                            }
+                            xhr.open("get", "http://127.0.0.1:8080/GetMoviecomment?movie=" + p);
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                            xhr.withCredentials = true;
+                            xhr.send();
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState === 4) {
+                                    if (xhr.status >= 200 & xhr.status < 300) {
+                                        var json = JSON.parse(xhr.responseText);
+                                        for (var i in json) {
+                                            _this.$data.people.push({
+                                                id: json[i][3],
+                                                name: json[i][0],
+                                                content: json[i][1],
+                                                num: json[i][2],
+                                            });
+
+                                        }
+                                        /*历史记录*/
+                                        var movieHistory = _this.$data.bookName + "(电影)";
+                                        xhr.open("get", "http://127.0.0.1:8080/WriteHistory?name=" + movieHistory);
+                                        xhr.setRequestHeader("Content-Type", "application/json");
+                                        xhr.withCredentials = true;
+                                        xhr.send();
+                                    }
+                                }
+                            }
+                        } else {
+                            alert("系统出现错误");
+                        }
+                    }
+                }
+            }
+        },
+    })
+</script>
+
+</html>

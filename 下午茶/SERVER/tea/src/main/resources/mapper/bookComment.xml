@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.tea.dao.bookComment">
+    <insert id="SetBookComment">
+        insert into bookcomment (book,UserName,content,num) values (#{arg2},#{arg0},#{arg1},0);
+    </insert>
+
+    <select id="GetBookComment" resultType="map">
+        select UserName,content,num,id
+        from bookcomment where book=#{arg0};
+    </select>
+</mapper>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="question.css">
+</head>
+
+<body>
+    <div id="question">
+        <div id="up">
+            <h3>{{title}}</h3>
+            <ul>
+                <li v-for="q in picture" :key="q.id" class="Picture">
+                    <div class="demo-image">
+                        <el-image style="width: 100px; height: 100px" :src="q.url" :fit="fill"></el-image>
+                    </div>
+                </li>
+                <li style="clear:both;list-style: none;"></li>
+            </ul>
+        </div>
+        <div>
+            <el-tag>回答</el-tag>
+        </div>
+        <div id="down">
+            <div id="comment">
+                <ul>
+                    <li v-for="p in question" :key="p.id" class="read">
+                        <div>
+                            <el-button type="text" @click="open(p.id)">{{p.name}}:</el-button>
+                            <span class="good" @click="clickGood(p.id)"><i class="el-icon-toilet-paper"></i></span>
+                            <span class="good">{{p.num}}</span>
+                        </div>
+                        <div class="q">
+                            {{p.content}}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
+                </el-input>
+            </div>
+            <div>
+                <el-button type="primary" @Click="comment">发表</el-button>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#question',
+        data: {
+            questionID: 0,
+            name: '',
+            title: '',
+            id: 0,
+            textarea1: '',
+            textarea2: '',
+            fill: "fill",
+            picture: [{
+                id: 0,
+                url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+            }, {
+                id: 4,
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            }, {
+                id: 1,
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            }, {
+                id: 2,
+                url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            }, ],
+            question: [],
+        },
+        methods: {
+            clickGood(id) {
+                this.$data.question[id].num += 1;
+            },
+            write() {
+                this.$data.response[this.$data.id].push({
+                    name: 'ffd',
+                    content: this.textarea2,
+                })
+            },
+            cancel() {
+                var p = document.getElementById("huifu");
+                p.style.display = "none";
+            },
+            comment() {
+                var json = {
+                    "name": this.$data.name,
+                    "content": this.$data.textarea1,
+                    "question": this.$data.questionID,
+                }
+                json = JSON.stringify(json);
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/questionComment2");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(json);
+                location.reload();
+            }
+        },
+        mounted() {
+            var _this = this;
+            var p = location.search;
+            p = p.slice(p.indexOf('?') + 1);
+            this.$data.questionID = p;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "http://127.0.0.1:8080/readQuestion?question=" + p);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 & xhr.status < 300) {
+                        if (xhr.responseText != "false") {
+                            var json = JSON.parse(xhr.responseText);
+                            _this.$data.title = json.title;
+                            _this.$data.picture[0].url = json.picture1;
+                            _this.$data.picture[1].url = json.picture2;
+                            _this.$data.picture[2].url = json.picture3;
+                            _this.$data.picture[3].url = json.picture4;
+                            _this.$data.name = json.name;
+                            xhr.open("get", "http://127.0.0.1:8080/questionComment1?question=" + p);
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                            xhr.withCredentials = true;
+                            xhr.send();
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState === 4) {
+                                    if (xhr.status >= 200 & xhr.status < 300) {
+                                        if (xhr.responseText != "false") {
+                                            var json = JSON.parse(xhr.responseText);
+                                            for (var i in json) {
+                                                _this.$data.question.push({
+                                                    id: json[i][3],
+                                                    name: json[i][0],
+                                                    content: json[i][1],
+                                                    num: json[i][2],
+                                                });
+                                            }
+                                        } else {
+                                            alert("系统出现错误");
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            alert("系统出现错误");
+                        }
+                    }
+                }
+            }
+        },
+    })
+</script>
+
+</html>

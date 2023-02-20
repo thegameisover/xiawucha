@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.tea.dao.movie">
+       <select id="getDayMovie" resultType="java.util.LinkedHashMap">
+           select id,movieName,mark,picture from movie order by id desc limit 0,10;
+       </select>
+
+    <select id="GetAllMovie" resultType="map">
+        select id,movieName,mark,picture from movie limit #{arg0},10;
+    </select>
+
+    <select id="GetMovie" resultType="map">
+        select id,movieName,director,country,picture,introduction,movieType1,mark,time from movie where id = #{arg0};
+    </select>
+
+    <select id="GetTypeMovie" resultType="map">
+        select id,movieName,mark,picture from movie where (movieType1=#{arg0} or movieType2=#{arg0}) and
+                                                          Type =#{arg1} and (time >=#{arg2} and #{arg3}>=time) limit #{arg4},10;
+    </select>
+
+    <select id="GetMovieAddress" resultType="map">
+        select  id,movieName,mark,picture from movie where (movieType1=#{arg0} or movieType2=#{arg0})
+              and (time>=#{arg1} and #{arg2}>=time) limit #{arg3} , 10;
+    </select>
+
+    <select id="GetMovieType" resultType="map">
+        select id,movieName,mark,picture from movie where Type =#{arg0} and (time>=#{arg1} and #{arg2}>=time) limit #{arg3},10;
+    </select>
+
+    <select id="GetMovieTime" resultType="map">
+        select id,movieName,mark,picture from movie where (movieType1=#{arg1} or movieType2=#{arg1})
+            and Type = #{arg0} limit #{arg2},10;
+    </select>
+
+    <select id="GetMovieAddType" resultType="map">
+        select id,movieName,mark,picture from movie where (time>=#{arg0} and #{arg1}>=time) limit #{arg2},10;
+    </select>
+
+    <select id="GetMovieAddTime" resultType="map">
+        select id,movieName,mark,picture from movie where movieType1=#{arg0} or movieType2=#{arg0} limit #{arg1},10;
+    </select>
+    
+    <select id="GetMovieTypeTime" resultType="map">
+        select id,movieName,mark,picture from movie where Type=#{arg0} limit #{arg1},10;
+    </select>
+
+    <select id="GetATT" resultType="map">
+        select id,movieName,mark,picture from movie where Type=#{arg0} and (movieType1=#{arg1} or movieType2=#{arg1}) and (time>=#{arg2} and #{arg3}>=time) limit #{arg4},10;
+    </select>
+
+    <insert id="UserMark">
+        insert into usermovie (id,mark,movie) values (#{arg0},#{arg1},#{arg2});
+    </insert>
+
+    <select id="GetMovieMark" resultType="int">
+        select mark from usermovie where id = (select id from user where UserName =#{arg0}) and movie = #{arg1};
+    </select>
+
+    <select id="SearchMovie" resultType="map">
+        select id,movieName,mark,picture from movie where movieName like concat('%',#{arg0},'%');
+    </select>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.tea.dao.book">
+       <select id="NewBook" resultType="map">
+              select bookName,id,picture from book where 8>=id;
+       </select>
+
+       <select id="AllBook" resultType="map">
+              select bookName,id,picture from book limit #{arg0},14 ;
+       </select>
+
+       <select id="GetBook" resultType="map">
+              select id,bookName,writer,country,picture,introduction,mark from book where id = #{arg0};
+       </select>
+
+       <select id="classificationBook" resultType="map">
+              select bookName,id,picture from book where bookType = #{arg0} limit #{arg1},14;
+       </select>
+
+       <insert id="UserMark" >
+              insert into userbook (id,mark,book)values(#{arg0},#{arg1},#{arg2});
+       </insert>
+
+       <select id="GetMark" resultType="int">
+              select mark from userbook where id = (select id from user where UserName =#{arg0}) and book = #{arg1};
+       </select>
+
+       <select id="SearchBook" resultType="map">
+              select bookName,id,picture from book where bookName like concat('%',#{arg0},'%');
+       </select>
+</mapper>

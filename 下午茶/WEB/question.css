@@ -1,0 +1,54 @@
+#question {
+    width: 80%;
+    margin: 0 auto;
+    background-color: gray;
+}
+
+#up {
+    word-break: break-all;
+}
+
+.Picture {
+    list-style: none;
+    float: left;
+}
+
+#down {
+    height: 400px;
+    background-color: wheat;
+}
+
+#comment {
+    height: 300px;
+    overflow: scroll;
+}
+
+.read {
+    list-style: none;
+    margin-bottom: 50px;
+}
+
+.q {
+    width: 500px;
+    word-break: break-all;
+}
+
+.good {
+    position: relative;
+    left: 80%;
+    cursor: pointer;
+}
+
+.response {
+    list-style: none;
+}
+
+#huifu {
+    display: none;
+    position: fixed;
+    width: 400px;
+    height: 300px;
+    background-color: white;
+    left: 30%;
+    top: 40%;
+}

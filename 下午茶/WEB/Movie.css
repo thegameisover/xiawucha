@@ -1,0 +1,51 @@
+.el-header {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+}
+
+.el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    text-align: center;
+}
+
+#MovieShow {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    margin-top: 7%;
+    height: 1000px;
+    overflow: scroll;
+}
+
+#movie {
+    position: fixed;
+    width: 100%;
+}
+
+.infinite-list-item {
+    float: left;
+    list-style: none;
+    height: 180px;
+    width: 15%;
+    margin-right: 5%;
+    margin-bottom: 7%;
+    cursor: pointer;
+}
+
+.address {
+    cursor: pointer;
+}
+
+.type {
+    cursor: pointer;
+}
+
+.date {
+    cursor: pointer;
+}
+
+.money {
+    cursor: pointer;
+}

@@ -1,0 +1,32 @@
+#Film {
+    height: 630px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.Move {
+    border: 1px solid black;
+    border-radius: 4px;
+    height: 180px;
+}
+
+.move {
+    float: left;
+    list-style: none;
+    height: 180px;
+    width: 15%;
+    margin-right: 5%;
+    margin-bottom: 7%;
+    cursor: pointer;
+}
+
+#FilmMore {
+    font-size: 15px;
+    font-family: '微软雅黑';
+    cursor: pointer;
+    text-align: right;
+}
+
+#film {
+    overflow: hidden;
+}

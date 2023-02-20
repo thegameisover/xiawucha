@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="readBook.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div id="readBook">
+        <div id="introduction">
+            <div id="over">
+                <div id="Photo">
+                    <img :src="picture" width="100%" height="200px" />
+                </div>
+                <div id="bookName">
+                    <span>[{{country}}]</span>
+                    <span>{{writer}}</span>
+                </div>
+                <div id="goal">
+                    <el-rate v-model="value" disabled show-score text-color="#ff9900" score-template="{value}">
+                    </el-rate>
+                </div>
+            </div>
+            <div id="down">
+                <h2>{{bookName}}</h2>
+                <div>
+                    <p>{{content}}</p>
+                </div>
+
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        <div id="comment">
+            <div id="mark">
+                <div class="block" @click="marking">
+                    <span>邀请你打分</span>
+                    <el-rate v-model="value1" :disabled="Read"></el-rate>
+                </div>
+                <div>
+                    <i class="el-icon-s-comment">评论</i>
+                    <div>
+                        <el-button type="primary">发表评论</el-button>
+                    </div>
+                    <div id="read">
+                        <ul>
+                            <li v-for="p in people" :key="p.id" class="Read">
+                                <div>{{p.name}}:</div>
+                                <span class="good" @click="clickGood(p.id)"><i class="el-icon-toilet-paper"></i></span>
+                                <span class="good">{{p.num}}</span>
+                                <div class="look">
+                                    {{p.content}}
+                                    <ul>
+                                        <li v-for="w in response[p.id]" :key="w.id" class="response">
+                                            {{w.name}}:{{w.content}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea1">
+        </el-input>
+        <el-button type="primary" @click="Comment">发布</el-button>
+        <div id="huifu">
+            <el-input type="textarea" autosize placeholder="请输入内容" v-model="textarea2">
+            </el-input>
+            <el-button type="success" @click="write">回复</el-button>
+            <el-button type="danger" @click="cancel">取消</el-button>
+        </div>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#readBook',
+        data: {
+            book: 0,
+            name: '',
+            Read: false,
+            picture: "",
+            country: '',
+            writer: '',
+            bookName: '',
+            content: '',
+            value: 5,
+            value1: 0,
+            colors: ['#99A9BF', '#F7BA2A', '#FF9900'], // 等同于 { 2: '#99A9BF', 4: { value: '#F7BA2A', excluded: true }, 5: '#FF9900' }
+            textarea1: '',
+            textarea2: '',
+            people: [],
+            response: [
+                [{
+                    id: 0,
+                    name: '李白',
+                    content: '6666'
+                }, {
+                    id: 1,
+                    name: '杜甫',
+                    content: '卧槽'
+                }],
+                [{
+                    id: 3,
+                    name: '王安石',
+                    content: '牛逼'
+                }],
+                [],
+                [],
+                [],
+                [],
+                []
+            ]
+        },
+        methods: {
+            clickGood(id) {
+                this.$data.people[id].num += 1;
+
+            },
+            open(id) {
+                var p = document.getElementById("huifu");
+                p.style.display = "block";
+                this.$data.id = id;
+            },
+            write() {
+                this.$data.response[this.$data.id].push({
+                    name: 'ffd',
+                    content: this.textarea2,
+                })
+            },
+            cancel() {
+                var p = document.getElementById("huifu");
+                p.style.display = "none";
+            },
+            marking() {
+                if (this.$data.name == "null") {
+                    alert("请先登录");
+                } else {
+                    if (this.$data.Read) {
+                        alert("不可重复评分");
+                    } else {
+                        this.$data.Read = true;
+                        var json = {
+                            "name": this.$data.name,
+                            "mark": this.$data.value1,
+                            "book": this.$data.book,
+                        }
+                        json = JSON.stringify(json);
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("post", "http://127.0.0.1:8080/UserBook");
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.withCredentials = true;
+                        xhr.send(json);
+                    }
+                }
+            },
+            Comment() {
+
+                var json = {
+                    "name": this.$data.name,
+                    "comment": this.$data.textarea1,
+                    "book": this.$data.book,
+                }
+                json = JSON.stringify(json);
+                var xhr = new XMLHttpRequest();
+                xhr.open("post", "http://127.0.0.1:8080/setBookcomment");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.withCredentials = true;
+                xhr.send(json);
+                location.reload();
+            }
+        },
+        mounted() {
+            var p = location.search;
+            p = p.slice(p.indexOf('?') + 1);
+            this.$data.book = p;
+            var _this = this;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "http://127.0.0.1:8080/Book?id=" + p);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 & xhr.status < 300) {
+                        if (xhr.responseText != "null") {
+                            var json = JSON.parse(xhr.responseText);
+                            _this.$data.bookName = json.bookName;
+                            _this.$data.country = json.country;
+                            _this.$data.writer = json.writer;
+                            _this.$data.content = json.content;
+                            _this.$data.value = json.value;
+                            _this.$data.picture = json.picture;
+                            _this.$data.name = json.name;
+                            _this.$data.value1 = json.mark;
+                            if (_this.$data.value1 == 0) {
+                                _this.$data.Read = false;
+                            } else {
+                                _this.$data.Read = true;
+                            }
+
+                            xhr.open("get", "http://127.0.0.1:8080/Bookcomment?book=" + p);
+                            xhr.setRequestHeader("Content-Type", "application/json");
+                            xhr.withCredentials = true;
+                            xhr.send();
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState === 4) {
+                                    if (xhr.status >= 200 & xhr.status < 300) {
+                                        var json = JSON.parse(xhr.responseText);
+
+                                        for (var i in json) {
+                                            _this.$data.people.push({
+                                                id: json[i][3],
+                                                name: json[i][0],
+                                                content: json[i][1],
+                                                num: json[i][2],
+                                            });
+
+                                        }
+                                        //*历史记录*//
+                                        var BN = _this.$data.bookName + "(书)";
+                                        xhr.open("get", "http://127.0.0.1:8080/WriteHistory?name=" + BN);
+                                        xhr.setRequestHeader("Content-Type", "application/json");
+                                        xhr.withCredentials = true;
+                                        xhr.send();
+                                    }
+                                }
+                            }
+                        } else {
+                            alert("系统出现错误");
+                        }
+
+                    }
+                }
+            }
+        },
+    })
+</script>
+
+</html>

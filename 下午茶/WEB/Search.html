@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Search.css">
+</head>
+
+<body>
+    <div id="Search">
+        <el-container>
+            <el-header>
+                <div class="choose" @click="read1">帖子</div>
+                <div class="choose" @click="book1">图书</div>
+                <div class="choose" @click="movie1">电影</div>
+                <div style="clear: both;"></div>
+            </el-header>
+            <el-main>
+                <div class="show">
+                    <ul>
+                        <li v-for="p in read" :key="p.id" class="Read">
+                            <div>
+
+                            </div>
+                            <div>
+                                <div class="passageShow">提问人:{{p.num}}</div>
+                                <div class="passageShow">发布日期:{{p.num}}</div>
+                                <div class="passageShow">回答人数:{{p.num}}</div>
+                                <div class="passageShow">举报</div>
+                                <div style="clear:both"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="show" style="display: none;">
+                    <ul>
+                        <li v-for="p in book" :key="p.id" class="Book" @click="ReadBook(p.id)">
+                            <div>
+                                <img :src="p.picture" height="140px" width="100%">
+                            </div>
+                            <div>
+                                {{p.name}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="show" style="display: none;">
+                    <ul>
+                        <li v-for="p in movie" :key="p.id" class="Movie" @click="movieShow(p.id)">
+                            <div class="Move">
+                                <img :src="p.picture" height="180px" width="100%">
+                            </div>
+                            <div>
+                                {{p.name}}
+                            </div>
+                            <div>
+                                评分:{{p.goal}}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </el-main>
+        </el-container>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: '#Search',
+        data: {
+            read: [],
+            book: [],
+            movie: [],
+        },
+        methods: {
+            read1() {
+                var p = document.getElementsByClassName("choose");
+                var q = document.getElementsByClassName("show");
+                p[0].style.backgroundColor = "gray";
+                p[1].style.backgroundColor = "#B3C0D1";
+                p[2].style.backgroundColor = "#B3C0D1";
+                q[0].style.display = "block";
+                q[1].style.display = "none";
+                q[2].style.display = "none";
+            },
+            book1() {
+                var p = document.getElementsByClassName("choose");
+                var q = document.getElementsByClassName("show");
+
+                p[1].style.backgroundColor = "gray";
+                p[0].style.backgroundColor = "#B3C0D1";
+                p[2].style.backgroundColor = "#B3C0D1";
+                q[1].style.display = "block";
+                q[0].style.display = "none";
+                q[2].style.display = "none";
+            },
+            movie1() {
+                var p = document.getElementsByClassName("choose");
+                var q = document.getElementsByClassName("show");
+
+                p[2].style.backgroundColor = "gray";
+                p[1].style.backgroundColor = "#B3C0D1";
+                p[0].style.backgroundColor = "#B3C0D1";
+                q[2].style.display = "block";
+                q[1].style.display = "none";
+                q[0].style.display = "none";
+            },
+            ReadBook(id) {
+                window.open("readBook.html?" + id);
+            },
+            movieShow(id) {
+                window.open("tvshow.html?" + id);
+            }
+        },
+        mounted() {
+            var p = location.search;
+            p = p.slice(p.indexOf('?') + 1);
+            var _this = this;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "http://127.0.0.1:8080/SearchBook?search=" + p);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    var json = JSON.parse(xhr.responseText);
+                    for (var i in json) {
+                        _this.$data.book.push({
+                            id: json[i][2],
+                            picture: json[i][1],
+                            name: json[i][0]
+                        });
+                    };
+                    xhr.open("get", "http://127.0.0.1:8080/SearchMovie?search=" + p);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.withCredentials = true;
+                    xhr.send();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            var json = JSON.parse(xhr.responseText);
+                            for (var i in json) {
+                                _this.$data.movie.push({
+                                    id: json[i][0],
+                                    name: json[i][1],
+                                    goal: json[i][2],
+                                    picture: json[i][3],
+                                });
+                            };
+                        }
+                    }
+                }
+            }
+        },
+    })
+</script>
+
+</html>

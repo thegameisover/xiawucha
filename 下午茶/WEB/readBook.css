@@ -1,0 +1,89 @@
+#over {
+    width: 50%;
+    height: 400px;
+    float: left;
+}
+
+#Photo {
+    margin-top: 70px;
+    margin-left: 10%;
+    width: 25%;
+    height: 200px;
+    border: 1px solid #f0f2f7;
+}
+
+#introduction {
+    border: 1px solid #f0f2f7;
+    background-color: gray;
+}
+
+#bookName {
+    margin-top: 2%;
+    padding-left: 10%;
+}
+
+#goal {
+    margin-top: 2%;
+    padding-left: 10%;
+}
+
+#down {
+    float: left;
+}
+
+h2 {
+    position: relative;
+    left: -80%;
+    top: 50px;
+}
+
+p {
+    position: relative;
+    width: 500px;
+    height: 200px;
+    word-break: break-all;
+    top: 70px;
+    left: -80%;
+    text-indent: 2em;
+}
+
+#comment {
+    border: 2px solid wheat;
+    border-radius: 7px;
+}
+
+#read {
+    height: 300px;
+    overflow: scroll;
+}
+
+.Read {
+    list-style: none;
+    margin-bottom: 50px;
+}
+
+.look {
+    text-indent: 2em;
+    width: 60%;
+    word-break: break-all;
+}
+
+.good {
+    position: relative;
+    left: 80%;
+    cursor: pointer;
+}
+
+.response {
+    list-style: none;
+}
+
+#huifu {
+    display: none;
+    position: fixed;
+    width: 400px;
+    height: 300px;
+    background-color: white;
+    left: 30%;
+    top: 40%;
+}

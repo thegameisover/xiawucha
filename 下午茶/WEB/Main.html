@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎访问下午茶</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Main.css">
+    <link rel="stylesheet" href="TimePicture.css">
+    <link rel="stylesheet" href="New.css">
+    <link rel="stylesheet" href="Book.css">
+    <link rel="stylesheet" href="film.css">
+    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="Github.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="logup.css">
+    <link rel="stylesheet" href="write.css">
+    <link rel="stylesheet" href="letter.css">
+    <link rel="stylesheet" href="history.css">
+</head>
+
+<body>
+    <div id="Floor0">
+        <div id="Floor1-1">
+            <el-row>
+                <el-col :span="24">
+                    <div class="grid-content bg-purple-dark">
+                        <div id="Floor2">
+                            <div class="Floor2-1-1">下午茶</div>
+                            <div class="Floor2-1-2">
+                                <div style="margin-top: 15px;">
+                                    <el-input placeholder="请输入内容" v-model="textSearch" class="input-with-select">
+                                        <el-button slot="append" icon="el-icon-search" style="background-color: aqua;" @click="search"></el-button>
+                                    </el-input>
+                                </div>
+                            </div>
+                            <div class="Floor2-1-3">
+                                <ul>
+                                    <li class="Head" @click="message" @mouseover="messageOver($event)" @mouseleave="messageLeave($event)" title="收件箱"><i class="el-icon-message"></i></li>
+                                    <li class="Head" @click="history" @mouseover="historyOver($event)" @mouseleave="historyLeave($event)" title="历史记录"><i class="el-icon-pie-chart"></i></li>
+                                    <li class="Head" @click="user" @mouseover="userOver($event)" @mouseleave="userLeave($event)">
+                                        <i class="el-icon-user">{{userName}}</i>
+                                    </li>
+                                    <li class="Head" @click="tool" @mouseover="toolOver($event)" @mouseleave="toolLeave($event)" title="设置">
+                                        <el-dropdown>
+                                            <span class="el-dropdown-link">
+                                              <i>
+                                                <i class="el-icon-s-tools"></i>
+                                              </i>
+                                            </span>
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item><span @click="home">个人主页</span></el-dropdown-item>
+                                                <el-dropdown-item><span @click="writePassage">发帖子</span></el-dropdown-item>
+                                                <el-dropdown-item><span @click="letter">收件箱</span></el-dropdown-item>
+                                                <el-dropdown-item><span @click="history">浏览历史</span></el-dropdown-item>
+                                                <el-dropdown-item><span @click="exit">退出登录</span></el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="Floor2-1-4"></div>
+                        </div>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
+        <div style="height: 80px;">
+
+        </div>
+        <div id="Floor1-2">
+            <el-row>
+                <el-col :span="12">
+                    <div class="grid-content bg-purple">
+                        <Timepicture ref="timePicture"></Timepicture>
+                        <!--轮播图-->
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div class="grid-content bg-purple-light">
+                        <!--每日新闻-->
+                        <New></New>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <div class="grid-content bg-purple">
+                        <!--影视-->
+                        <film ref="Movie"></film>
+                    </div>
+
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <div class="grid-content bg-purple">
+                        <!--书-->
+                        <book ref="BOOK"></book>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <div class="grid-content bg-purple">
+                        <!--交流-->
+                        <Chat ref="Chat"></Chat>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
+        <el-row>
+            <el-col :span="24">
+                <div class="grid-content bg-purple">
+                    <github></github>
+                </div>
+            </el-col>
+        </el-row>
+        <Login></Login>
+        <Logup></Logup>
+        <write></write>
+        <letter></letter>
+        <history></history>
+    </div>
+</body>
+<script src="vue.js"></script>
+<script src="elements.js"></script>
+<script src="TimePicture.js"></script>
+<script src="New.js"></script>
+<script src="Book.js"></script>
+<script src="film.js"></script>
+<script src="chat.js"></script>
+<script src="Github.js"></script>
+<script src="login.js"></script>
+<script src="logup.js"></script>
+<script src="write.js"></script>
+<script src="letter.js"></script>
+<script src="history.js"></script>
+<script type="text/javascript">
+    new Vue({
+        el: "#Floor0",
+        data: {
+            /*获取当前电脑的屏幕的宽和高*/
+            width: window.screen.width,
+            height: window.screen.height,
+            Picture: 0,
+            userName: '登录或注册',
+            book: [],
+            time: [],
+            movie: [],
+            question: [],
+            textSearch: '',
+        },
+        components: {
+            Timepicture: Timepicture,
+            New: New,
+            book: Book,
+            film: Film,
+            Chat: Chat,
+            github: github,
+            Login: Login,
+            Logup: Logup,
+            write: write,
+            letter: letter,
+            history: history
+        },
+        mounted() {
+            /*初始化主界面的宽*/
+            var width = document.getElementById("Floor1-2");
+            width.style.width = this.$data.width * 0.8 + 'px';
+            this.$data.Picture = this.$data.width * 0.8 * 0.5;
+            var _this = this;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", "http://127.0.0.1:8080/main");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+            xhr.send();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.responseText != "") {
+                        _this.$data.userName = xhr.responseText;
+                        xhr.open("get", "http://127.0.0.1:8080/daybook");
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.withCredentials = true;
+                        xhr.send();
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4) {
+                                if (xhr.responseText != "false") {
+                                    var json = JSON.parse(xhr.responseText);
+                                    for (var i in json) {
+                                        _this.$data.book.push({
+                                            id: json[i][2],
+                                            picture: json[i][1],
+                                            name: json[i][0]
+                                        });
+                                    };
+                                    _this.$refs.BOOK.book = _this.$data.book;
+                                    xhr.open("get", "http://127.0.0.1:8080/timepicture");
+                                    xhr.setRequestHeader("Content-Type", "application/json");
+                                    xhr.withCredentials = true;
+                                    xhr.send();
+                                    xhr.onreadystatechange = function() {
+                                        if (xhr.readyState === 4) {
+                                            if (xhr.responseText != "false") {
+                                                var json = JSON.parse(xhr.responseText);
+                                                for (var i in json) {
+                                                    _this.$data.time.push({
+                                                        id: json[i][0],
+                                                        picture: json[i][1],
+                                                    });
+                                                };
+                                                _this.$refs.timePicture.Picture = _this.$data.time;
+                                                xhr.open("get", "http://127.0.0.1:8080/dayMovie");
+                                                xhr.setRequestHeader("Content-Type", "application/json");
+                                                xhr.withCredentials = true;
+                                                xhr.send();
+                                                xhr.onreadystatechange = function() {
+                                                    if (xhr.readyState === 4) {
+                                                        if (xhr.responseText != "false") {
+                                                            var json = JSON.parse(xhr.responseText);
+                                                            for (var i in json) {
+                                                                _this.$data.movie.push({
+                                                                    id: json[i][0],
+                                                                    name: json[i][1],
+                                                                    goal: json[i][2],
+                                                                    picture: json[i][3],
+                                                                });
+                                                            };
+                                                            _this.$refs.Movie.movie = _this.$data.movie;
+                                                            xhr.open("get", "http://127.0.0.1:8080/question");
+                                                            xhr.setRequestHeader("Content-Type", "application/json");
+                                                            xhr.withCredentials = true;
+                                                            xhr.send();
+                                                            xhr.onreadystatechange = function() {
+                                                                if (xhr.readyState === 4) {
+                                                                    if (xhr.responseText != "false") {
+                                                                        var json = JSON.parse(xhr.responseText);
+                                                                        for (var i in json) {
+                                                                            _this.$data.question.push({
+                                                                                id: json[i][0],
+                                                                                title: json[i][1],
+                                                                                name: json[i][2],
+                                                                                date: json[i][3],
+                                                                                num: json[i][4],
+                                                                            });
+                                                                        };
+                                                                        _this.$refs.Chat.Passage = _this.$data.question;
+
+                                                                    } else {
+                                                                        alert("系统出现错误");
+                                                                    }
+                                                                }
+                                                            };
+                                                        } else {
+                                                            alert("系统出现错误");
+                                                        }
+                                                    }
+                                                };
+                                            } else {
+                                                alert("系统出现错误");
+                                            }
+                                        }
+                                    };
+                                } else {
+                                    alert("系统出现错误");
+                                }
+                            }
+                        };
+                    } else {
+                        xhr.open("get", "http://127.0.0.1:8080/daybook");
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.withCredentials = true;
+                        xhr.send();
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4) {
+                                if (xhr.responseText != "false") {
+                                    var json = JSON.parse(xhr.responseText);
+                                    for (var i in json) {
+                                        _this.$data.book.push({
+                                            id: json[i][2],
+                                            picture: json[i][1],
+                                            name: json[i][0]
+                                        });
+                                    };
+                                    _this.$refs.BOOK.book = _this.$data.book;
+                                    xhr.open("get", "http://127.0.0.1:8080/timepicture");
+                                    xhr.setRequestHeader("Content-Type", "application/json");
+                                    xhr.withCredentials = true;
+                                    xhr.send();
+                                    xhr.onreadystatechange = function() {
+                                        if (xhr.readyState === 4) {
+                                            if (xhr.responseText != "false") {
+                                                var json = JSON.parse(xhr.responseText);
+                                                for (var i in json) {
+                                                    _this.$data.time.push({
+                                                        id: json[i][0],
+                                                        picture: json[i][1],
+                                                    });
+                                                };
+                                                _this.$refs.timePicture.Picture = _this.$data.time;
+                                                xhr.open("get", "http://127.0.0.1:8080/dayMovie");
+                                                xhr.setRequestHeader("Content-Type", "application/json");
+                                                xhr.withCredentials = true;
+                                                xhr.send();
+                                                xhr.onreadystatechange = function() {
+                                                    if (xhr.readyState === 4) {
+                                                        if (xhr.responseText != "false") {
+                                                            var json = JSON.parse(xhr.responseText);
+                                                            for (var i in json) {
+                                                                _this.$data.movie.push({
+                                                                    id: json[i][0],
+                                                                    name: json[i][1],
+                                                                    goal: json[i][2],
+                                                                    picture: json[i][3],
+                                                                });
+                                                            };
+                                                            _this.$refs.Movie.movie = _this.$data.movie;
+                                                            xhr.open("get", "http://127.0.0.1:8080/question");
+                                                            xhr.setRequestHeader("Content-Type", "application/json");
+                                                            xhr.withCredentials = true;
+                                                            xhr.send();
+                                                            xhr.onreadystatechange = function() {
+                                                                if (xhr.readyState === 4) {
+                                                                    if (xhr.responseText != "false") {
+                                                                        var json = JSON.parse(xhr.responseText);
+                                                                        for (var i in json) {
+                                                                            _this.$data.question.push({
+                                                                                id: json[i][0],
+                                                                                title: json[i][1],
+                                                                                name: json[i][2],
+                                                                                date: json[i][3],
+                                                                                num: json[i][4],
+                                                                            });
+                                                                        };
+                                                                        _this.$refs.Chat.Passage = _this.$data.question;
+
+                                                                    } else {
+                                                                        alert("系统出现错误");
+                                                                    }
+                                                                }
+                                                            };
+                                                        } else {
+                                                            alert("系统出现错误");
+                                                        }
+                                                    }
+                                                };
+                                            } else {
+                                                alert("系统出现错误");
+                                            }
+                                        }
+                                    };
+                                } else {
+                                    alert("系统出现错误");
+                                }
+
+                            }
+                        };
+                    }
+                }
+            };
+
+
+
+        },
+        methods: {
+            search() {
+
+                window.open("Search.html?" + this.$data.textSearch);
+            },
+            message() {
+                var p = document.getElementById("letter");
+                p.style.display = "block";
+            },
+            messageOver($event) {
+                var p = document.getElementsByClassName("Head");
+                p[0].style.color = "gray";
+            },
+            messageLeave($event) {
+                var p = document.getElementsByClassName("Head");
+                p[0].style.color = "black";
+            },
+            history() {
+                var p = document.getElementById("History");
+                p.style.display = "block";
+            },
+            historyOver($event) {
+                var p = document.getElementsByClassName("Head");
+                p[1].style.color = "gray";
+            },
+            historyLeave($event) {
+                var p = document.getElementsByClassName("Head");
+                p[1].style.color = "black";
+            },
+            user() {
+                if (this.$data.userName == "登录或注册") {
+                    var p = document.getElementById("Login");
+                    p.style.display = "block";
+                }
+
+            },
+            userOver($event) {
+                var p = document.getElementsByClassName("Head");
+                p[2].style.color = "gray";
+            },
+            userLeave($event) {
+                var p = document.getElementsByClassName("Head");
+                p[2].style.color = "black";
+            },
+            tool() {
+
+            },
+            toolOver($event) {
+                var p = document.getElementsByClassName("Head");
+                p[3].style.color = "gray";
+            },
+            toolLeave($event) {
+                var p = document.getElementsByClassName("Head");
+                p[3].style.color = "black";
+            },
+            writePassage() {
+                var p = document.getElementById("write");
+                p.style.display = "block";
+            },
+            home() {
+                window.open("Home.html");
+            },
+            letter() {
+                var p = document.getElementById("letter");
+                p.style.display = "block";
+            },
+            history() {
+                var p = document.getElementById("History");
+                p.style.display = "block";
+            },
+            exit() {
+                this.$data.userName = "登录或注册";
+                var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+                if (keys) {
+                    for (var i = keys.length; i--;)
+                        document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+                }
+            }
+
+        }
+    })
+</script>
+
+</html>
